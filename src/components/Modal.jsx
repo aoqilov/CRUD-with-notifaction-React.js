@@ -4,8 +4,9 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Formik, useFormik } from "formik";
 import { productSchema } from "../schema";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "sonner";
 
-const Modal = ({ modalOpen, setModalOpen, addProduct }) => {
+const Modal = ({ modalOpen, setModalOpen, setTodos }) => {
   const { values, errors, touched, handleSubmit, handleChange, handleBlur } =
     useFormik({
       initialValues: {
@@ -18,7 +19,6 @@ const Modal = ({ modalOpen, setModalOpen, addProduct }) => {
       validationSchema: productSchema,
       onSubmit: (values, { resetForm }) => {
         addProduct(values); // Yangi productni qo'shish
-
         resetForm(); // Formani tozalash
         setModalOpen(false); // Modalni yopish
       },
@@ -34,7 +34,10 @@ const Modal = ({ modalOpen, setModalOpen, addProduct }) => {
       document.body.style.overflow = "visible";
     };
   }, [modalOpen]);
-
+  function addProduct(newProduct) {
+    setTodos((prevTodos) => [...prevTodos, newProduct]);
+    toast.success("When saving data, remember!!! to save storage.");
+  }
   return (
     <div className="container min-h-screen max-w-full absolute">
       <div className="fixed inset-0 bg-gray-700 bg-opacity-75 flex justify-center items-center z-20">
